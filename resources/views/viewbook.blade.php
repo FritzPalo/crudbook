@@ -4,7 +4,7 @@
 @section('content')
 
     <a href="{{ route('create.view') }}">Add Books</a><br><br>
-    <h1>View</h1>
+    <h1>View Book</h1>
     <table>
         
         <tr>
