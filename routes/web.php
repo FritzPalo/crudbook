@@ -18,4 +18,4 @@ Route::get('/create', [bookcontroller::class, 'createview' ])->name('create.view
 Route::post('/book-create', [bookController::class, 'create'])->name('create');
 Route::get('/update/{id}', [bookcontroller::class, 'updateview' ])->name('update.view');
 Route::post('/book-update/{id}', [bookController::class, 'update'])->name('update');
-Route::a('/book-delete/{id}', [bookController::class, 'delete'])->name('delete');
+Route::get('/book-delete/{id}', [bookController::class, 'delete'])->name('delete');
