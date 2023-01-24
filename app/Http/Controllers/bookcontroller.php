@@ -10,9 +10,9 @@ class bookcontroller extends Controller
 {
     public function view(){
 
-        $book = books::all();
+        $books = books::all();
 
-        return view("viewbook", compact('book'));
+        return view("viewbook", compact('books'));
     }
 
     public function createview(){
