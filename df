@@ -1,0 +1,29 @@
+[33mcommit 9aa4ddc90ea540fa9b2b3ed109519cb85d4425e2[m[33m ([m[1;36mHEAD -> [m[1;32mjavascript_model[m[33m, [m[1;31morigin/javascript_model[m[33m)[m
+Author: Fritz <fepalo@diwamail.com>
+Date:   Tue Jan 24 14:44:05 2023 +0800
+
+    Created a modal displaying the Details of the book
+
+[33mcommit 0c69d1052d4f58bc629738c473b399e52cde11cb[m[33m ([m[1;31morigin/development[m[33m, [m[1;32mdevelopment[m[33m)[m
+Author: Fritz <fepalo@diwamail.com>
+Date:   Tue Jan 24 07:34:28 2023 +0800
+
+    Added a new collumn at books table
+
+[33mcommit aba30f49f958a59423294d3cc89d907b41dd466c[m
+Author: Fritz <fepalo@diwamail.com>
+Date:   Tue Jan 24 07:08:44 2023 +0800
+
+    Fix the bugs at the route
+
+[33mcommit bf9d646f5deccdb59e83e73a1e99be3fd2210c03[m[33m ([m[1;31morigin/development_copy[m[33m, [m[1;32mdevelopment_copy[m[33m)[m
+Author: Fritz <fepalo@diwamail.com>
+Date:   Mon Jan 23 15:32:06 2023 +0800
+
+    update new fle & book label
+
+[33mcommit 9cba316b71c1a88333a05f6899c894c6dd814e09[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster_copy[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Fritz <fepalo@diwamail.com>
+Date:   Mon Jan 23 15:23:21 2023 +0800
+
+    initiL COMMIT
