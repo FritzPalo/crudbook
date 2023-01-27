@@ -3,122 +3,322 @@
 
 @section('content')
 
-    {{-- <a href="{{ route('create.view') }}">Add Books</a><br><br> --}}
-    <button id="myBtn" onclick="addModal()">Add Books</button>
+    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                            data-bs-target="#AddbookModal">Add book</button>
     <h1>View Book</h1>
+    <div id="success_message"></div>
     <table>
-        
-        <tr>
-            <th>Title</th>
-            <th>Update</th>
-            <th>Delete</th>
-            <th>Show Details</th>
-            
-        </tr>
-            
-        @foreach($books as $book)
+        <thead>
             <tr>
-                <td>{{ $book->Title }}</td>
-                <td><button id="myBtn" onclick="updateModal({{ $book }})">Update</button></td>
-                <td><a href="{{ route('delete', $book->id ) }}">Delete</a></td>
-                <td> <button id="myBtn" onclick="showModal({{ $book }})">Show</button></td>
-
+                <th>Title</th>
+                <th>Update</th>
+                <th>Delete</th>
+                <th>Show Details</th>
             </tr>
-        @endforeach
+        </thead>
+        <tbody>
+        </tbody>
     </table>
-        <div id="myModal" class="modal">
 
+    {{-- Add Modal --}}
+    <div class="modal fade" id="AddbookModal" tabindex="-1" aria-labelledby="AddbookModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <span onclick="closeModal()" class="close">&times;</span>
-                <h1 id="title"></h1>
-                <p id="description"></p>
-                <p id="author"></p>
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddbookModalLabel">Add book Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
 
-        </div>
+                    <ul id="save_msgList"></ul>
 
-        <div id="addBookModal" class="modal">
-
-            <div class="modal-content">
-                <span onclick="closeModal()" class="close">&times;</span>
-
-                <form action="{{ route('create') }}" method="POST">
-                    @csrf
-                    <label for="Title">Title:</label><br>
-                    <input type="text" id="Title" name="Title"><br>
-                    <span>@error('Title') {{ $message }} @enderror</span>
-                    <label for="Description">Description:</label><br>
-                    <input type="text" id="Description" name="Description"><br><br>
-                    <span>@error('Description') {{ $message }} @enderror</span>
-                    <label for="Author">Author:</label><br>
-                    <input type="text" id="Author" name="Author"><br><br>
-                    <span>@error('Author') {{ $message }} @enderror</span>
-                    <input type="submit" value="Create">
-                </form> 
-
-
-            </div>
-
-        </div>
-
-        <div id="updateBookModal" class="modal">
-
-            <div class="modal-content">
-                <span onclick="closeModal()" class="close">&times;</span>
-
-                <form action="{{ route('update', $book->id) }}" method="POST">
-                    @csrf
-                        <label for="updateTitle">Title:</label><br>
-                        <input type="text" id="updateTitle" name="Title" ><br>
-                        <span>@error('Title') {{ $message }} @enderror</span>
-                        <label for="updateDescription">Description:</label><br>
-                        <input type="text" id="updateDescription" name="Description" ><br><br>
-                        <span>@error('Description') {{ $message }} @enderror</span>
-                        <label for="updateAuthor">Author:</label><br>
-                        <input type="text" id="updateAuthor" name="Author"><br><br>
-                        <span>@error('Author') {{ $message }} @enderror</span>
-                        <input type="submit" value="Update">
-                    </form> 
-
+                    <div class="form-group mb-3">
+                        <label for="">Title</label>
+                        <input type="text" required class="Title form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Description</label>
+                        <input type="text" required class="Description form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Author</label>
+                        <input type="text" required class="Author form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onClick="addButton()" class="btn btn-primary ">Save</button>
+                </div>
 
             </div>
-
         </div>
+    </div>
+    {{-- End Add Modal --}}
 
+    {{-- show Modal --}}
+    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit & Update book Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Title</label>
+                    <h3 id="showTitle"></h3>
+                    <label>Description</label>
+                    <h3 id="showDescription"></h3>
+                    <label>Author</label>
+                    <h3 id="showAuthor"></h3>
+
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{-- End show Modal --}}
+
+    {{-- Edit Modal --}}
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit & Update book Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <ul id="update_msgList"></ul>
+
+                    <input type="hidden" id="book_id" />
+
+                    <div class="form-group mb-3">
+                        <label for="">Title</label>
+                        <input type="text" id="Title" required class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Description</label>
+                        <input type="text" id="Description" required class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Author</label>
+                        <input type="text" id="Author" required class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" onClick="updateButton()" class="btn btn-primary">Update</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{-- End Edit Modal --}}
+
+
+    {{-- Delete Modal --}}
+    <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete book Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Confirm to Delete Data ?</h4>
+                    <input type="hidden" id="deleteing_id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onClick="deletedata()" class="btn btn-primary">Yes Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End - Delete Modal --}}
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
     <script>
+
+        fetchbooks();
+
+        function fetchbooks() {
+            $.ajax({
+                type: "GET",
+                url: "/fetchbooks",
+                dataType: "json",
+                success: function (response) {
+                        $('tbody').html("");
+                        $.each(response.books, function (key, book) {
+                            $('tbody').append( `<tr>
+                                <td> ${book.Title} </td>\
+                                <td><button type="button" onClick="editButton(${book.id})" class="btn btn-primary btn-sm">Edit</button></td>
+                                <td><button type="button" onClick="deleteButton(${book.id})" class="btn btn-danger btn-sm">Delete</button></td>
+                                <td><button type="button" onClick="showButton(${book.id})" class="btn btn-primary btn-sm">Show</button></td>
+                            </tr>`);
+                        });
+                }
+            });
+        }
+
+        function showButton(bookid){
+
+            $.ajax({
+                type: "GET",
+                url: "/edit/" + bookid,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#editModal').modal('hide');
+                    } else {
+                        $('#showModal').modal('show');
+                        $('#showTitle').text(response.book.Title)
+                        $('#showDescription').text(response.book.Description)
+                        $('#showAuthor').text(response.book.Author)
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
         
-        function showModal(book) {
-            document.getElementById("title").innerHTML = "Title: " + book.Title;
-            document.getElementById("description").innerHTML = "Description: " + book.Description;
-            document.getElementById("author").innerHTML = "Author: " + book.Author;
-            myModal.style.display = "block";
-        }
+        };
 
-        function addModal() {
-            addBookModal.style.display = "block";
-        }
+        function addButton(){
 
-        function updateModal(book) {
-            updateBookModal.style.display = "block";
-            document.getElementById("updateTitle").value = book.Title;
-            document.getElementById("updateDescription").value = book.Description;
-            document.getElementById("updateAuthor").value = book.Author;
-            
-        }
+            var data = {
+                'Title': $('.Title').val(),
+                'Description': $('.Description').val(),
+                'Author': $('.Author').val(),
+            }
 
-        function closeModal() {
-            myModal.style.display = "none";
-            addBookModal.style.display = "none";
-            updateBookModal.style.display = "none";
-        }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-        // window.onclick = function(event) {
-        //     if (event.target == myModal || event.target == addBookModal || event.target == updateBookModal) {
-        //         myModal.style.display = "none";
-        //         addBookModal.style.display = "none";
-        //         updateBookModal.style.display = "none";
-        // }
-        // }
+            $.ajax({
+                type: "POST",
+                url: "/create",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                    } else {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#AddbookModal').modal('hide');
+                        fetchbooks();
+                    }
+                }
+            });
+
+        };
+
+        function editButton(bookid){
+            $('#editModal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/edit/" + bookid,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#editModal').modal('hide');
+                    } else {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').removeClass('alert alert-danger');
+                        $('#Title').val(response.book.Title);
+                        $('#Description').val(response.book.Description);
+                        $('#Author').val(response.book.Author);
+                        $('#book_id').val(bookid);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+        
+        };
+
+
+        function updateButton() {
+
+            var id = $('#book_id').val();
+            console.log($('#book_id').val());
+            var data = {
+                'Title': $('#Title').val(),
+                'Description': $('#Description').val(),
+                'Author': $('#Author').val(),
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: "/update/" + id,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 400) {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#update_msgList').append('<li>' + err_value +
+                                '</li>');
+                        });
+                    } else {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
+                        fetchbooks();
+                    }
+                }
+            });
+
+        };
+
+        function deleteButton(bookid){
+            $('#DeleteModal').modal('show');
+            $('#deleteing_id').val(bookid);
+        };
+
+        function deletedata(){
+
+            var id = $('#deleteing_id').val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/delete/" + id,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('.delete_book').text('Yes Delete');
+                    } else {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_book').text('Yes Delete');
+                        $('#DeleteModal').modal('hide');
+                        fetchbooks();
+                    }
+                }
+            });
+        };
 
     </script>
 

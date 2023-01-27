@@ -14,8 +14,9 @@ use App\Http\Controllers\bookcontroller;
 */
 
 Route::get('/', [bookcontroller::class, 'view' ])->name('book.view');
-Route::get('/create', [bookcontroller::class, 'createview' ])->name('create.view');
-Route::post('/book-create', [bookController::class, 'create'])->name('create');
-Route::get('/update/{id}', [bookcontroller::class, 'updateview' ])->name('update.view');
-Route::post('/book-update/{id}', [bookController::class, 'update'])->name('update');
-Route::get('/book-delete/{id}', [bookController::class, 'delete'])->name('delete');
+Route::post('/create', [bookController::class, 'create']);
+Route::get('/edit/{id}', [bookController::class, 'edit']);
+Route::get('/show/{id}', [bookController::class, 'show']);
+Route::put('/update/{id}', [bookController::class, 'update']);
+Route::delete('/delete/{id}', [bookController::class, 'delete']);
+Route::get('/fetchbooks', [BookController::class, 'fetchbooks']);
